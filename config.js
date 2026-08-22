@@ -12,7 +12,7 @@ const pkg = JSON.parse(await fs.promises.readFile(new URL('./package.json', impo
 const moduleCache = new NodeCache({ stdTTL: 300 });
 
 	
-global.gab = ['393882471151',]
+global.gab = ['393455383567',]
 global.owner = [
   ['393455383567', 'gnegne', true],
   ['x', 'x', true],
