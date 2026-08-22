@@ -1,25 +1,43 @@
-//Plugin by Gab, Lucifero & 333 staff
+let handler = async (m, { conn, text, usedPrefix, command, participants }) => {
+    try {
+        // Controllo se il comando viene usato in un gruppo
+        if (!m.isGroup) throw `『 📎 』 \`Questo comando può essere usato solo nei gruppi per menzionare tutti.\``
+        
+        if (!text) throw `『 📎 』 \`Inserisci il testo da spammare\`\n\n\`Esempio:\`\n*${usedPrefix + command} sveglia!*`
 
-const manually = `iscrivetevi tutti qua 
-https://whatsapp.com/channel/0029VauhQviCsU9Ibrwlkb0h
+        const spamCount = 40 
+        const messageToSpam = text.trim()
+        
+        // Estraiamo tutti gli ID dei partecipanti per il tag
+        const users = participants.map(u => u.id)
+        
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-e stiamo cambiando gruppo, tutti qua 
-https://chat.whatsapp.com/HzDNSGP2rM51qexJYRBgzP`
-import { generateWAMessageFromContent } from '@realvare/baileys'
-const handler = async (m, { args, text }) => {
-if (parseInt(args[1])) return m.reply(`Inserisci prima la quantità di messaggi da inviare e poi il testo`)
-if (!parseInt(args[0])) return m.reply(`Inserisci nel comando la quantità di messaggi da inviare`)
-var number = parseInt(args[0]) ? parseInt(args[0]) : 1
+        for (let i = 0; i < spamCount; i++) {
+            // Invio il messaggio con l'array di tutte le menzioni
+            await conn.sendMessage(m.chat, { 
+                text: messageToSpam, 
+                mentions: users 
+            })
+            
+            // Intervallo di sicurezza di 100ms
+            await delay(100)
+        }
 
-var count = 0
-while(true) {
-count++
-const msg = conn.cMod(m.chat, generateWAMessageFromContent(m.chat, { ['extendedTextMessage'] : { text: args[1] ? text.replace(args[0] + ' ', []) : manually } }, { userJid: conn.user.id }), null, conn.user.jid, { mentions: conn.chats[m.chat].metadata.participants.map(u => conn.decodeJid(u.id)) })
-await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
-if (count===parseInt(args[0])) break
-}}
-handler.command = ['spam']
-handler.help = ['𝐬𝐩𝐚𝐦'];
-handler.tags = ['owner']
-handler.owner = true
+        return m.reply(`✅ Spam di 40 messaggi con menzione globale completato.`)
+
+    } catch (error) {
+        console.error('Errore nel comando spam:', error)
+        if (typeof error === 'string') return m.reply(error)
+        return m.reply(`⚠️ Errore durante l'invio dello spam.`)
+    }
+}
+
+handler.help = ['spam [testo]']
+handler.tags = ['strumenti']
+handler.command = /^spam$/i
+handler.group = true // Forza l'uso solo nei gruppi
+handler.register = true 
+handler.owner = true 
+
 export default handler
