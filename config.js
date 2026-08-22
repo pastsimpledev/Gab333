@@ -14,10 +14,10 @@ const moduleCache = new NodeCache({ stdTTL: 300 });
 	
 global.gab = ['393882471151',]
 global.owner = [
-  ['393792036333', 'Lucifero', true],
-  ['393892430108', 'Gab', true],
-  ['66621409462', 'Matte', true],
-  ['393701330693', 'Blood', true],
+  ['393455383567', 'gnegne', true],
+  ['x', 'x', true],
+  ['x', 'x', true],
+  ['x', 'x', true],
 ]
 
 
